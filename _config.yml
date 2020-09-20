@@ -18,7 +18,7 @@ minimal_mistakes_skin    : "default" # "air", "aqua", "contrast", "dark", "dirt"
 
 # Site Settings
 locale                   : "en-US"
-title                    : "Site Title"
+title                    : "Anything about Structural enginnering solution SW planning"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Your Name"
@@ -95,10 +95,10 @@ analytics:
 
 # Site Author
 author:
-  name             : "Your Name"
+  name             : "Cookie mon-HH"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
-  bio              : "I am an **amazing** person."
-  location         : "Somewhere"
+  bio              : "Building Structual Engineering SW planner"
+  location         : "Pangyo-Korea"
   email            :
   links:
     - label: "Email"
