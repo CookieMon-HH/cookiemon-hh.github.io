@@ -6,4 +6,4 @@ layout: single
 
 "현형 생일축하해요!"  
   
-![](cookiemon-hh.github.io/assets/pageimage/KHbirth.jpg)
+![](https://cookiemon-hh.github.io/assets/pageimage/KHbirth.jpg)
