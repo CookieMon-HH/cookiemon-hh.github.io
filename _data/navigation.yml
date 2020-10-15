@@ -1,12 +1,8 @@
 # main links
 main: 
-#  - title: "Posts"
-#   url: https://cookiemon-hh.github.io/
   - title: "About"
     url: /about/
   - title: "Categories"
     url: /categories/
-#  - title: "test"
-#    url: /categories/test/
 #  - title: "Tags"
 #     url: /tags/
