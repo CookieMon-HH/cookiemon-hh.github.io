@@ -1,0 +1,100 @@
+---
+title : "5.딕셔너리"
+categories:
+  - Python
+# tags:
+#  - Python
+date : 2020-11-16
+---
+
+딕셔너리 : 임의의 객체집합적 자료형이며 별도의 자료순서를 가지지 않고 자료의 순서를 정할 수 없는 매핑형이며 키를 통해 빠른 검색이 필요할 때 사용함, 강력하면서 알아두면 편리한 자료구조  
+
+```python
+>>> d=dict(a=1,b=2,c=3)
+>>> d
+{'a': 1, 'b': 2, 'c': 3}
+>>> type(d)
+<class 'dict'>
+>>> color={"apple":"red","banana":"yellow"}
+>>> color
+{'apple': 'red', 'banana': 'yellow'}
+>>> color["apple"]
+'red'
+>>> color["cherry"]="red"
+>>> color
+{'apple': 'red', 'banana': 'yellow', 'cherry': 'red'}
+>>> for c in color.items():
+	print(c)
+
+	
+('apple', 'red')
+('banana', 'yellow')
+('cherry', 'red')
+>>> for k,v in color.items():
+	print(k,v)
+
+	
+apple red
+banana yellow
+cherry red
+```  
+딕셔너리에서 데이터를 삭제하려면 del 또는 clear 함수를  사용한다.
+
+```python
+>>> color
+{'apple': 'red', 'banana': 'yellow', 'cherry': 'red'}
+>>> del color['cherry']
+>>> color
+{'apple': 'red', 'banana': 'yellow'}
+>>> color.clear()
+>>> color
+{}
+```
+아래와 같이 값을 입력한 후 수정과 삭제가 가능하다.  
+
+```python
+>>> device={'갤럭시':5,'갤탭':10,'서피스프로':20}
+>>> device['아이폰']=15
+>>> device['갤럭시']=6
+>>> device
+{'갤럭시': 6, '갤탭': 10, '서피스프로': 20, '아이폰': 15}
+>>> del device['갤럭시']
+>>> device
+{'갤탭': 10, '서피스프로': 20, '아이폰': 15}
+```
+
+아래와 같이 딕셔너리는 key값과 value 값을 쌍으로 가지고 있는 구조이다.  
+
+```python
+>>> device.keys()
+dict_keys(['갤탭', '서피스프로', '아이폰'])
+>>> device.values()
+dict_values([10, 20, 15])
+```
+
+다음과 같이 반복값을 출력할 때 전체 값 또는 key / value 값을 통해 참조할 수 있다. 
+
+```python
+>>> D={'a':1,'b':2,'c':3}
+>>> for i in D.items():    //전체값 출력을 위해 items 사용
+	print (i)
+
+('a', 1)
+('b', 2)
+('c', 3)
+
+>>> for key in D.keys():  // key값을 참조하여 출력
+	print (key,D[key])      //key는 D.keys()에 있는 key값을, D[key]는 D에 key값에 대응하는 value값을 출력
+
+a 1
+b 2
+c 3
+
+>>> for i in D.values():  //value 값을 출력
+	print(i)
+	
+1
+2
+3
+```
+
