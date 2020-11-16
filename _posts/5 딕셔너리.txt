@@ -1,0 +1,9 @@
+---
+title : "5.딕셔너리"
+categories:
+  - Python
+# tags:
+#  - Python
+date : 2020-11-16
+---
+
