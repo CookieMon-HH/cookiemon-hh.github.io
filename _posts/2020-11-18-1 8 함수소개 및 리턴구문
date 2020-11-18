@@ -1,0 +1,58 @@
+---
+title : "8.함수소개 및 리턴구문"
+categories:
+  - Python(문법)
+# tags:
+#  - Python
+date : 2020-11-18
+---
+
+
+프로그래밍을 할 때 똑같은 내용을 반복적으로 작업해야 한다면 함수를 정의하고 사용하면 편리하다.  
+이번 포스팅에는 파이썬에서는 함수를 어떻게 정의하고 사용하는지 알아보고자 한다.  
+
+- 함수 : 비슷한 목적으로 묶어진 약속  
+- 함수의 특징
+  - 여러개의 문장 (statement)를 하나로 묶어서 다시 호출할 수 있도록 이름을 부여한다.  
+  - 함수도 객체처럼 메모리상에 생성한다.  
+  - 직접 함수를 만들 수도 있고, 파이썬에 내장되어있는 함수들도 있다.  
+  - def로 시작해서 콜론(:)으로 끝난다.  
+  - 함수의 시작과 끝은 코드의 들여쓰기로 구분하는데 이는 파이썬의 특징중 하나이다.  
+  - 함수선언을 헤더파일에 미리 선언하거나 인터페이스와 구현으로 나누지 않고 필요할 때 바로 선언하고 사용할 수 있다.  
+
+- 함수의 기본구조  
+  def<함수명> (인자1,인자2,인자3,....인자N):  
+    <구문>  
+    return <반환값>  
+
+```python 
+>>> def multiply (a,b):
+      	return a*b                           //함수 구문에서는 들여쓰기를 주의해야 한다.
+
+>>> multiply
+<function multiply at 0x0000029B7A30CC10>    //함수도 메모리상에 생성됨
+>>> multiply (3,4)
+12
+
+>>> globals()                                //globals()함수는 객체의 값을 딕셔너리 형태로 볼 수 있는 내장함수
+{'__name__': '__main__', '__doc__': None, '__package__': None, '__loader__': <class '_frozen_importlib.BuiltinImporter'>, '__spec__': None, '__annotations__': {}, '__builtins__': <module 'builtins' (built-in)>, 'mutiply': <function mutiply at 0x0000029B7A30C700>, 'multiply': <function multiply at 0x0000029B7A30CC10>}
+```
+
+- 함수를 호출한 곳으로 되돌아 가려면 return 구문을 이용한다.  
+  (함수에서 return은 함수를 종료하고 해당 함수를 호출한 곳으로 되돌하가게 한다.)  
+  
+  ```python
+>>> def setvalue(newvalue):    //리턴값이 없는 함수 
+       	x=newvalue
+	
+>>> a=setvalue(10)
+>>> print(a)
+None
+>>> def swap (x,y):           //리턴값이 있는 경우 
+  	    return y,x            //함수에서 해당 부분에 들어오면 해당 값을 리턴하고 함수를 종료하며 함수를 호출한 곳으로 돌아간다.
+
+>>> a,b=swap(1,2)
+>>> print(a,b)
+2 1
+```
+
