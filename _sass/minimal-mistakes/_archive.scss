@@ -9,12 +9,12 @@
   @include breakpoint($large) {
     float: right;
     width: calc(100% - #{$right-sidebar-width-narrow});
-    padding-right: $right-sidebar-width-narrow;
+    padding-right: 0; /*$right-sidebar-width-narrow*/
   }
 
   @include breakpoint($x-large) {
     width: calc(100% - #{$right-sidebar-width});
-    padding-right: $right-sidebar-width;
+    padding-right: 0; /*$right-sidebar-width-narrow*/
   }
 }
 
@@ -199,14 +199,6 @@
   .page__meta {
     margin: 0 0 4px;
     font-size: 0.6em;
-  }
-
-  .page__meta-sep {
-    display: block;
-
-    &::before {
-      display: none;
-    }
   }
 
   .archive__item-title {
