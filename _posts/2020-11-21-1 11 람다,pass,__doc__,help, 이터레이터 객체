@@ -12,7 +12,7 @@ date : 2020-11-21
 
 람다 (lambda) : 익명 함수를 만들 때 사용  
 pass : 아무것도 하지 않고 그냥 넘어가도록 할 떄 사용  
-__doc__, help : 생성한 함수의 설명을 추가하고 싶을 때 사용      
+__doc__, help : 생성한 함수의 설명을 추가하거나 확인하고 싶을 때 사용      
 이터레이터 객체 : 순회가능한 형식에서 값을 안전하고 빠르게 나열하고 싶을 때 사용  
 
 람다 함수   
@@ -25,12 +25,12 @@ __doc__, help : 생성한 함수의 설명을 추가하고 싶을 때 사용
 >>> g=lambda x,y : x*y    #g라는 변수에 저장해서 계속 호출할 수 있음
 >>> g(2,3)
 6
->>> (lambda x : x*x) (3)  #람다함수를 정의 후 호출하고 바로 사라지기 때문에 계속 호출할 수 없음
+>>> (lambda x : x*x) (3)  #람다함수를 정의 후 호출하고 바로 사라지기 때문에 계속 호출할 수 없음 (1회성 함수)
 9
 >>> globals
 <built-in function globals>
 >>> globals()
-{... 'g': <function <lambda> at 0x00000169EE0D1CA0> ...} #바로 사라진 함수는 저장되지 않고 g만 저장된 것을 확인
+{... 'g': <function <lambda> at 0x00000169EE0D1CA0> ...} #1회성 함수는 저장되지 않고 g만 저장된 것을 확인
 ```
 
 Pass 함수  
@@ -38,13 +38,44 @@ Pass 함수
 
 ```python 
 
+>>> def extract_a(a):
+	templist=[]
+	for x in a:
+		if x  == 'a' :
+			templist.append(x)
+		else :
+			pass     #x='a'가 아닌 경우에는 아무것도 하지 않고 넘어감
+	return templist
+
+>>> extract_a("ham")
+['a']
+>>> extract_a("haaaam")
+['a', 'a', 'a', 'a']
+
 ```
 
 __doc__, help 함수 
 - 생성한 함수에 대해 자세한 설명을 추가하고 싶을 때 사용, help의 경우 특정 함수의 자세한 설명을 확인 할 수 있다.   
 
 ```python 
->>> help(print)
+>>> def add(a,b):
+	return a+b
+
+>>> help(add)           #add 함수의 설명을 추가하지 않았으므로 설명이 나오지 않음 
+Help on function add in module __main__:
+
+add(a, b)
+
+#__doc__를 통해 함수의 설명을 추가
+>>> add.__doc__="이 함수는 두개의 인자를 더하는 함수 입니다."  
+
+>>> help(add)
+Help on function add in module __main__:
+
+add(a, b)
+    이 함수는 두개의 인자를 더하는 함수 입니다.   #정의한 함수의 설명이 출력됨을 확인
+
+>>> help(print)                                #내장된 함수의 설명을 출력
 Help on built-in function print in module builtins:
 
 print(...)
