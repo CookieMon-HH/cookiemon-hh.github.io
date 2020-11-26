@@ -6,3 +6,7 @@ xlrd
 numpy
 jupyter notebook
 matplotlib
+
+
+python3.9에서 xlsx 호환을 위해 xlrd 수정 필요
+https://stackoverflow.com/questions/64264563/attributeerror-elementtree-object-has-no-attribute-getiterator-when-trying
