@@ -4,6 +4,7 @@ pandas
 xlwings 
 xlrd 
 openpyxl  
+pathlib  
 numpy
 jupyter notebook
 matplotlib
