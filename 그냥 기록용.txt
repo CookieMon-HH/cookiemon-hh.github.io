@@ -3,6 +3,7 @@
 pandas 
 xlwings 
 xlrd 
+openpyxl  
 numpy
 jupyter notebook
 matplotlib
