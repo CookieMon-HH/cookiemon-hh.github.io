@@ -1,4 +1,5 @@
 #아나콘다를 사용하지 않는 경우 받아야 할 기본 모듈 
+pip install "라이브러리명"  
 
 pandas 
 xlwings 
