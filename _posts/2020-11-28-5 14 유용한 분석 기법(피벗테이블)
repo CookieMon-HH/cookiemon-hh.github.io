@@ -1,5 +1,5 @@
 ---
-title : "13.유용한 분석 기법(피벗테이블)"
+title : "14.유용한 분석 기법(피벗테이블)"
 categories:
   - 파이썬 데이터 분석
 # tags:
@@ -8,3 +8,71 @@ categories:
 #  - Pandas
 date : 2020-11-28
 ---
+
+
+피벗테이블 : 그룹분석을 통해 새로운 데이터프레임을 생성, 데이터를 새로운 기준으로 바라보고자 할 때 사용  
+원본 그대로만 데이터를 바라봐서는 데이터를 이해하기 어렵다.  
+여러 각도에서 
+
+```python
+
+
+%matplotlib inline
+import pandas as pd 
+from matplotlib import rc
+
+rc('font' , family = 'Malgun Gothic')
+
+마트판매현황 = pd.read_excel('data/합친결과.xlsx')   #2016년도 상반기
+print(마트판매현황.shape)
+마트판매현황.head()
+
+ 마트판매현황.describe()         #개수,평균, 표준편차 등 기본정보 확인 가능 
+
+마트판매현황.describe().loc['max']     #max값만 가져올 수 있음
+
+#원하는 %위치의 값 확인
+마트판매현황.describe(percentiles=[.10, .20, .30, .40, .50, .60, .70, .80, .90])
+
+마트판매현황['매출']=마트판매현황['가격']*마트판매현황['판매건수']
+
+마트판매현황['상품명'].value_counts().sort_values(ascending=False)[:10]
+
+#상품명으로 묶음(상품명이 여러개 중복), 숫자데이터에 한해서만 column을 통해 보여짐
+#보여지는 데이터는 default로 평균
+
+마트판매현황.pivot_table(index='상품명')   
+
+ #values : 특정한 값만 확인, 문자열, 리스트 모두 지원
+마트판매현황.pivot_table(index='상품명',values=['매출','판매건수'])  
+
+#보여지는 값 종류 지정(aggfunc: mean,sum,max,min등)
+
+마트판매현황.pivot_table(index='년월',values=['매출','판매건수'],aggfunc='sum')  
+
+마트판매현황.pivot_table(index='년월',values=['매출','판매건수'],aggfunc='sum').plot(kind='pie',y='매출')
+
+
+
+
+
+
+
+
+
+top100 = pd.read_excel('data/top100.xlsx', index_col='곡일련번호')
+print (top100.shape)
+top100.head()
+
+top100.describe()
+
+top100['가수'].value_counts().sort_values(ascending=False)
+
+top100.pivot_table(index='가수',values='좋아요',aggfunc='mean').sort_values('좋아요',ascending=False)
+
+#상위 10개만 추리기
+top10 = top100.pivot_table(index='가수',values='좋아요',aggfunc='mean').sort_values('좋아요',ascending=False).head(10)
+
+top10.sort_values('좋아요',ascending=True).plot(kind='barh')
+
+```
