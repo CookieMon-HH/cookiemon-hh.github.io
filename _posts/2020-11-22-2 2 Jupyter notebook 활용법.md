@@ -1,20 +1,50 @@
+---
+title : "2.Jupyter notebook 활용법"
+categories:
+  - 파이썬 데이터 분석
+# tags:
+#  - Python
+#  - 데이터 분석
+#  - Pandas
+date : 2020-11-22
+---
 
 
 Jupyter notebook 확용법에 대해 알아보자.  
 
-Jupyter 특징 및 실행방법  
+Jupyter 특징  
 ---
 
-특징
 - 웹브라우저 기반, 다양한 표현도구  
 - 실행되는 코드와 out 내역이 함께 ipynb파일로 저장된다.  
 - 스마트기기에서도 접속될만큼 높은 호환성 및 접근성을 가진다.  
+
+
+
+Jupyter notebook 설치 및 실행방법 
+--- 
+
+Anaconda를 통해 설치했다면 Jupyter notebook은 갈이 설치되기때문에 별도의 추가설치를 할 필요는 없다.  
+Anaconda를 설치할 수 없는 환경인 경우 아래의 방법을 통해 설치하자.
+
+1. pip 설치 
+2. Power shell 혹은 cmd창에서 pip install jupyter notebook 
+3. 이와 함께 같이 설치하면 좋은 라이브러리는 다음과 같다.  (anaconda를 통해 설치한 경우에는 대부분의 라이브러리가 설치되어있어 추가 설치는 필요없다.)  
+pandas   
+xlwings  
+xlrd  
+openpyxl   
+pathlib   
+numpy  
+matplotlib  
+<br>
 
 Jupyter notebook의 실행 방법  
 - jupyter notebook 찾아서 실행  
 - Power shell 창 호출 -> cd "원하는 실행 겅로 입력"  -> jupyter notebook 입력 -> 웹브라우저 창 실행  
 - 이때 jupyter note 서버창은 끄면 안된다.  
 - 바로 웹브라우저가 실행되지 않는다면 실행창에 떠있는 경로를 실행한다.  
+<br>
 
 Jupyter notebook 활용 방법  
 ---
