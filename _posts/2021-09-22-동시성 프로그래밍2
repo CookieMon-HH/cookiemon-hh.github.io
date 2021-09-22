@@ -1,0 +1,20 @@
+
+
+
+21.9.22 
+비동기성2
+지연평가+Promise - L.map, map, take 
+1) L.map : go -> go1으로 바꿔서 promise 인 경우 받을 수 있도록 수정 (go1은 promise인 경우에 대한처리를 해주는 함수) 
+
+2) take : promise로 들어온 객체를 array로 반환할 수 있도록 수정 
+(push해 줄 때 promise면 a.then 값을 넣어준다)
+이때 구문에서 recursive 함수를 return해주는 방식을 썼음) 
+
+
+Kleisli Composition - L.filter, filter, nop take
+
+
+reduce에서 nop 지원 
+
+
+지연평가 + Promise의 효율성
