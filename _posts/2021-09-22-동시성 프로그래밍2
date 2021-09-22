@@ -1,20 +1,203 @@
 
 
 
-21.9.22 
-비동기성2
-지연평가+Promise - L.map, map, take 
-1) L.map : go -> go1으로 바꿔서 promise 인 경우 받을 수 있도록 수정 (go1은 promise인 경우에 대한처리를 해주는 함수) 
+21.9.22  
+비동기성2  
+## 지연평가+Promise - L.map, map, take   
+1. L.map : go -> go1으로 바꿔서 promise 인 경우 받을 수 있도록 수정 (go1은 promise인 경우에 대한처리를 해주는 함수)   
 
-2) take : promise로 들어온 객체를 array로 반환할 수 있도록 수정 
-(push해 줄 때 promise면 a.then 값을 넣어준다)
-이때 구문에서 recursive 함수를 return해주는 방식을 썼음) 
+```javascript  
+const go1 = (a, f) => a instanceof Promise ? a.then(f) : f(a);  
+
+L.map = curry(function* (f, iter) {
+  for (const a of iter) {
+    yield go1(a, f);
+  }
+});
+
+```  
+
+2. take : promise로 들어온 객체를 array로 반환할 수 있도록 수정   
+(push해 줄 때 promise면 a.then 값을 넣어준다)  
+이때 구문에서 recursive 함수를 return해주는 방식을 썼음)  
+
+```javascript  
+
+const take = curry((l, iter) => {
+  let res = [];
+  iter = iter[Symbol.iterator]();
+  return function recur() {
+    let cur;
+    while (!(cur = iter.next()).done) {
+      const a = cur.value;
+      if (a instanceof Promise) {
+        return a
+          .then(a => (res.push(a), res).length == l ? res : recur())
+          .catch(e => e == nop ? recur() : Promise.reject(e));
+      }
+      res.push(a);
+      if (res.length == l) return res;
+    }
+    return res;
+  }();
+});
+
+```  
+
+## Kleisli Composition - L.filter, filter, nop, take  
+1. filter가 promise도 받을 수 있도록 수정  
+1) go1을 추가하여 promise가 온 경우 받을 수 있도록 수정  
+2) promise 값은 true로 받기 때문에 promise 값을 then으로 풀어서 true/false를 판별할 수 있도록 수정  
+  (이때 false인 경우 값을 사용하지 않도록 하기 위해 kelisli compostion 활용)  
+  (false인 경우 reject를 해서 반환을 해주는데 오류인지 구분을 하기 위해 구분자 nop 활용)  
+  (reject에 nop 구분자를 담아서 반환한 후 take에서 catch를 통해 처리)
+  (take에서 온 reject가 symbol nop을 반환한 경우 push 하지 않고 구문을 돌도록하고 실제로 에러가 발샌항 경우 (nop을 반환하지 않은 경우)는 그대로 오류값을 반환해준다.)  
+  (이때 reject로 반환된 값은 then연산을 하지 않으므로 reject(nop)으로 반환된 값은 L.map에서 처리하지 않고 반환해준다.)  
+  (then은 resolve인 경우 들어오는 듯)  
+
+```javascript  
+
+L.filter = curry(function* (f, iter) {
+  for (const a of iter) {
+    const b = go1(a, f);
+    if (b instanceof Promise) yield b.then(b => b ? a : Promise.reject(nop));
+    else if (b) yield a;
+  }
+});
+
+const take = curry((l, iter) => {
+  let res = [];
+  iter = iter[Symbol.iterator]();
+  return function recur() {
+    let cur;
+    while (!(cur = iter.next()).done) {
+      const a = cur.value;
+      if (a instanceof Promise) {
+        return a
+          .then(a => (res.push(a), res).length == l ? res : recur())
+          .catch(e => e == nop ? recur() : Promise.reject(e));
+      }
+      res.push(a);
+      if (res.length == l) return res;
+    }
+    return res;
+  }();
+});
 
 
-Kleisli Composition - L.filter, filter, nop take
+```  
 
 
-reduce에서 nop 지원 
+L.map 참고  
+```javascript  
+const go1 = (a, f) => a instanceof Promise ? a.then(f) : f(a);
+
+L.map = curry(function* (f, iter) {
+  for (const a of iter) {
+    yield go1(a, f);
+  }
+});
+
+```  
+
+* catch.prototype의 method이며 반환값이 reject인 경우에 대한 처리를 해준다.  
+
+ex)  
+```javascript  
+const promise = new Promise((resolve, reject)=>{
+  setTimeout(()=>{
+    reject("reject");
+  }, 3000);
+});
+
+promise.then(result => console.log(result)).catch(error => console.log(error));
+// 3초 후에 결과가 출력
+// reject
+
+```  
 
 
-지연평가 + Promise의 효율성
+## reduce에서 nop 지원   
+1) 전달한 함수를 promise가 아닌 값으로 계산할 수 있도록 수정  
+(promise인 경우 then을 통해 값을 꺼내서 계산하고 reject인 경우 nop이면 초기값만 반환하는 함수 reduceF를 만들어서 적용)  
+  
+2) 초기값(acc)이 없는 경우에 대해 비동기상황에서도 문제없도록, 코드 간결화하기 위해 head를 뽑아내는 함수를 만들어 적용   
+
+```javascript  
+
+const reduceF = (acc, a, f) =>
+  a instanceof Promise ?
+    a.then(a => f(acc, a), e => e == nop ? acc : Promise.reject(e)) :
+    f(acc, a);
+
+const head = iter => go1(take(1, iter), ([h]) => h);
+
+const reduce = curry((f, acc, iter) => {
+  if (!iter) return reduce(f, head(iter = acc[Symbol.iterator]()), iter);
+
+  iter = iter[Symbol.iterator]();
+  return go1(acc, function recur(acc) {
+    let cur;
+    while (!(cur = iter.next()).done) {
+      acc = reduceF(acc, cur.value, f);
+      if (acc instanceof Promise) return acc.then(recur);
+    }
+    return acc;
+  });
+});
+
+```  
+
+## 지연평가 + Promise의 효율성  
+  
+* 비동기성과 지연성을 같이 적용하면 비동기 상황에서 필요한 상황에서만 구문이 돌기때문에 효율적으로 처리할 수 있다.  
+
+
+## 지연된 함수열을 병렬적으로 평가하기 - C.reduce, C.take  
+  
+* 아래와 같은 상황에선 1,2,3.. 하나씩 돌지만 1,2,3..을 동시에 병렬적으로 돌 수 있도록 하도록 구현해보자.  
+
+```javascript  
+
+const delay1000 = a => new Promise(resolve => {
+    console.log('hi~');
+    setTimeout(() => resolve(a), 1000);
+  });
+  
+go([1, 2, 3, 4, 5, 6, 7, 8, 9],
+  L.map(a => delay1000(a * a)),
+  L.filter(a => delay1000(a % 2)),
+  reduce(add)
+
+```  
+
+1. 동시에 동작하는 C.reduce 함수    
+
+* 다음과 같이 만들면 비동기를 제어하지 않고 먼저 실행하여 reduce에서 값을 다시 꺼내가며 비동기제어를 해가며 수행한다?...    
+
+```javascript  
+
+  const C = {};
+  
+  C.reduce = curry((f, acc, iter) => iter ?
+    reduce(f, acc, catchNoop(iter)) :
+    reduce(f, catchNoop(acc))); 
+
+```  
+
+2. C.take 함수  
+
+```javascript  
+
+  function noop() {
+  }
+
+  const catchNoop = ([...arr]) =>
+    (arr.forEach(a => a instanceof Promise ? a.catch(noop) : a), arr);
+
+  C.take = curry((l, iter) => take(l, catchNoop(iter)));
+  
+```  
+
+
+
